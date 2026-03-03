@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1 Year With You</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: white;
+    background: linear-gradient(-45deg, #000000, #1a001a, #330033, #000000);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 20px;
+}
+
+h1 {
+    color: hotpink;
+    animation: floatTitle 3s ease-in-out infinite;
+}
+
+@keyframes floatTitle {
+    0%,100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background-color: hotpink;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: deeppink;
+    transform: scale(1.1);
+}
+
+.hidden {
+    display: none;
+}
+
+.fade {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+/* Floating hearts */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp 6s linear infinite;
+    color: hotpink;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+}
+
+/* Stars */
+.star {
+    position: fixed;
+    width: 2px;
+    height: 2px;
+    background: white;
+    opacity: 0.5;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from {opacity: 0.2;}
+    to {opacity: 1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Connecting to: Dangerously Beautiful...</h1>
+<p id="text">Ping: Long Distance | Status: Worth It</p>
+
+<button id="startBtn" onclick="startGame()">Press Start</button>
+<button id="nextBtn" class="hidden" onclick="nextLevel()">Continue</button>
+
+<button id="yesBtn" class="hidden" onclick="finalMessage()">Yes</button>
+<button id="noBtn" class="hidden">No</button>
+</div>
+
+<script>
+
+let level = 0;
+let typingTimeout;
+let isTyping = false;
+
+function typeWriter(text, speed = 40) {
+    clearTimeout(typingTimeout);
+    let i = 0;
+    const element = document.getElementById("text");
+    element.innerHTML = "";
+    element.classList.add("fade");
+    isTyping = true;
+
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            typingTimeout = setTimeout(typing, speed);
+        } else {
+            isTyping = false;
+        }
+    }
+    typing();
+}
+
+function startGame() {
+    level = 1;
+    typeWriter("I told myself this was temporary. Just another online conversation...");
+    document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+function nextLevel() {
+    if (isTyping) return;
+
+    level++;
+
+    if (level === 2)
+        typeWriter("Then I met you. Weird. Mysterious. Dangerously beautiful.");
+
+    else if (level === 3)
+        typeWriter("I acted nonchalant. But inside? I was already falling.");
+
+    else if (level === 4)
+        typeWriter("So I booked that flight. Nervous. Confident. Internally screaming.");
+
+    else if (level === 5)
+        typeWriter("And when you said yes… my world upgraded to version 1.0.");
+
+    else if (level === 6)
+        typeWriter("Not everyone understood us. But we chose each other anyway.");
+
+    else if (level === 7)
+        typeWriter("We didn't bond over brokenness. We healed. Together.");
+
+    else if (level === 8)
+        typeWriter("One year later… through distance, doubts, and chaos…");
+
+    else if (level === 9)
+        typeWriter("I still choose you. Every single time.");
+
+    else if (level === 10) {
+        document.getElementById("nextBtn").classList.add("hidden");
+        typeWriter("So tell me… will you still choose me?");
+        document.getElementById("yesBtn").classList.remove("hidden");
+        document.getElementById("noBtn").classList.remove("hidden");
+        startHearts();
+        makeNoRun();
+    }
+}
+
+function finalMessage() {
+    typeWriter("Good. Because I'm not going anywhere. I love you.");
+    document.getElementById("yesBtn").classList.add("hidden");
+    document.getElementById("noBtn").classList.add("hidden");
+}
+
+/* Floating hearts */
+function startHearts() {
+    setInterval(function() {
+        let heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+    }, 300);
+}
+
+/* Runaway No */
+function makeNoRun() {
+    const noBtn = document.getElementById("noBtn");
+    noBtn.addEventListener("mouseover", function() {
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
+        noBtn.style.position = "absolute";
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    });
+}
+
+/* Create stars */
+for (let i = 0; i < 80; i++) {
+    let star = document.createElement("div");
+    star.className = "star";
+    star.style.top = Math.random() * 100 + "%";
+    star.style.left = Math.random() * 100 + "%";
+    document.body.appendChild(star);
+}
+
+</script>
+
+</body>
+</html>
