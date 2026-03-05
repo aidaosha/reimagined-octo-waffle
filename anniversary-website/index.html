@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1 Year With You</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(-45deg,#000000,#1a001a,#330033,#000000);
+background-size:400% 400%;
+animation:gradientBG 15s ease infinite;
+color:white;
+text-align:center;
+overflow:hidden;
+}
+
+@keyframes gradientBG{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+padding:20px;
+position:relative;
+z-index:2;
+}
+
+.slider{
+position:relative;
+width:90%;
+max-width:360px;
+height:420px;
+margin:20px auto;
+overflow:hidden;
+border-radius:20px;
+box-shadow:0 0 30px hotpink;
+}
+
+.slide{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:20px;
+opacity:0;
+transform:translateX(100%);
+transition:transform 1s ease,opacity 1s ease;
+}
+
+.slide.active{
+opacity:1;
+transform:translateX(0) scale(1.05);
+}
+
+.slide.exit{
+transform:translateX(-100%);
+opacity:0;
+}
+
+#text{
+min-height:60px;
+margin:20px;
+font-size:16px;
+}
+
+button{
+padding:12px 25px;
+font-size:15px;
+background:hotpink;
+border:none;
+border-radius:8px;
+margin:8px;
+color:white;
+}
+
+button:active{
+transform:scale(0.95);
+}
+
+.hidden{
+display:none;
+}
+
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:20px;
+animation:floatUp 6s linear infinite;
+color:hotpink;
+}
+
+@keyframes floatUp{
+to{
+transform:translateY(-100vh);
+opacity:0;
+}
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.9);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:26px;
+padding:40px;
+opacity:0;
+pointer-events:none;
+transition:opacity 1s;
+z-index:10;
+}
+
+.overlay.show{
+opacity:1;
+pointer-events:auto;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>1 Year With You ❤️</h2>
+
+<div class="slider">
+
+<img src="images/pic1.jpg" class="slide active">
+<img src="images/pic2.jpg" class="slide">
+<img src="images/pic3.jpg" class="slide">
+<img src="images/pic4.jpg" class="slide">
+<img src="images/pic5.jpg" class="slide">
+
+</div>
+
+<p id="text">Ping: Long Distance | Status: Worth It</p>
+
+<button id="startBtn" onclick="startGame()">Start</button>
+<button id="nextBtn" class="hidden" onclick="nextLevel()">Continue</button>
+
+<button id="yesBtn" class="hidden" onclick="finalMessage()">Yes</button>
+<button id="noBtn" class="hidden">No</button>
+
+</div>
+
+<div id="finalOverlay" class="overlay">
+I love you. Always have. Always will. ❤️
+</div>
+
+<audio id="bgMusic" loop>
+<source src="music/love.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+let level=0
+let currentSlide=0
+let isTyping=false
+
+const slides=document.querySelectorAll(".slide")
+
+const messages=[
+"",
+"I told myself this was temporary. Just another online conversation...",
+"Then I met you. Weird. Mysterious. Dangerously beautiful.",
+"I acted nonchalant. But inside? I was already falling.",
+"So I booked that flight. Nervous. Confident. Internally screaming.",
+"And when you said yes… my world upgraded to version 1.0.",
+"Not everyone understood us. But we chose each other anyway.",
+"One year later… through distance, doubts, and chaos…",
+"I still choose you. Every single time."
+]
+
+function typeWriter(text,speed=35){
+
+let i=0
+const el=document.getElementById("text")
+el.innerHTML=""
+isTyping=true
+
+function typing(){
+if(i<text.length){
+el.innerHTML+=text.charAt(i)
+i++
+setTimeout(typing,speed)
+}else{
+isTyping=false
+}
+}
+
+typing()
+
+}
+
+function changeSlide(){
+
+if(currentSlide>=slides.length-1)return
+
+slides[currentSlide].classList.remove("active")
+slides[currentSlide].classList.add("exit")
+
+currentSlide++
+
+slides[currentSlide].classList.add("active")
+
+}
+
+function startGame(){
+
+level=1
+
+document.getElementById("bgMusic").play()
+
+typeWriter(messages[level])
+
+document.getElementById("startBtn").classList.add("hidden")
+document.getElementById("nextBtn").classList.remove("hidden")
+
+}
+
+function nextLevel(){
+
+if(isTyping)return
+
+level++
+
+if(level<messages.length){
+
+typeWriter(messages[level])
+changeSlide()
+
+}
+
+else{
+
+document.getElementById("nextBtn").classList.add("hidden")
+
+typeWriter("So tell me… will you still choose me?")
+
+document.getElementById("yesBtn").classList.remove("hidden")
+document.getElementById("noBtn").classList.remove("hidden")
+
+startHearts()
+makeNoRun()
+
+}
+
+}
+
+function finalMessage(){
+
+document.getElementById("finalOverlay").classList.add("show")
+
+}
+
+function startHearts(){
+
+setInterval(function(){
+
+let heart=document.createElement("div")
+
+heart.className="heart"
+heart.innerHTML="❤"
+
+heart.style.left=Math.random()*window.innerWidth+"px"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>heart.remove(),6000)
+
+},400)
+
+}
+
+function makeNoRun(){
+
+const noBtn=document.getElementById("noBtn")
+
+noBtn.addEventListener("mouseover",function(){
+
+noBtn.style.position="absolute"
+
+noBtn.style.left=Math.random()*(window.innerWidth-80)+"px"
+noBtn.style.top=Math.random()*(window.innerHeight-50)+"px"
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
